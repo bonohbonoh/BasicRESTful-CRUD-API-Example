@@ -10,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,13 +20,16 @@ import java.util.stream.Collectors;
 public class BookService {
     private final BookRepository bookRepository;
     @Transactional
-    public String registrationBook(RegistrationBookDto dto) throws Exception {
-        Optional<Book> book = bookRepository.findByBookId(dto.toEntity().getBookId());
+    public boolean registrationBook(RegistrationBookDto dto) throws Exception {
+        Optional<Book> book = bookRepository.findAllByTitle(dto.toEntity().getTitle());
         if (book.isPresent()){
             throw new DuplicateKeyException("이미 존재하는 책입니다.");
         }
         String title = bookRepository.save(dto.toEntity()).getTitle();
-        return title;
+        if(!title.equals("")){
+            return true;
+        }
+        return false;
     }
 
     @Transactional(readOnly = true)

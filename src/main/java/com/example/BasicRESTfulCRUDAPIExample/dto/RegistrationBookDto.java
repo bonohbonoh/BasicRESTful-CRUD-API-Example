@@ -1,6 +1,7 @@
 package com.example.BasicRESTfulCRUDAPIExample.dto;
 
 import com.example.BasicRESTfulCRUDAPIExample.entity.Book;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class RegistrationBookDto {
     @NotEmpty
     @Size(min = 2, max = 40, message = "책글자는 2글자 ~ 40글자 사이입니다.")

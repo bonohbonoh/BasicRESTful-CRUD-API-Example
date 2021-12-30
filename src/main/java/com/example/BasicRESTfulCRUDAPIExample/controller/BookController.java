@@ -22,8 +22,8 @@ public class BookController {
 
     @PostMapping(value = "")
     public ResponseEntity bookSave(@RequestBody @Valid RegistrationBookDto dto) throws Exception {
-        String title = bookService.registrationBook(dto);
-        if (!title.equals("")) {
+        boolean isRegistrationBook = bookService.registrationBook(dto);
+        if(isRegistrationBook){
             return new ResponseEntity(HttpStatus.CREATED);
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
