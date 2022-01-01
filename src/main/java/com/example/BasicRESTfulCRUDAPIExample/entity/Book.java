@@ -25,15 +25,15 @@ public class Book {
     @Column(nullable = false)
     private int price;
 
-    public void updateTitle(String title){
+    public void updateTitle(String title) {
         this.title = title;
     }
 
-    public void updateAuthor(String author){
+    public void updateAuthor(String author) {
         this.author = author;
     }
 
-    public void updatePrice(int price){
+    public void updatePrice(int price) {
         this.price = price;
     }
 

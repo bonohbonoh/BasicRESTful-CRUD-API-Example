@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -23,7 +22,7 @@ public class BookController {
     @PostMapping(value = "")
     public ResponseEntity bookSave(@RequestBody @Valid RegistrationBookDto dto) throws Exception {
         boolean isRegistrationBook = bookService.registrationBook(dto);
-        if(isRegistrationBook){
+        if (isRegistrationBook) {
             return new ResponseEntity(HttpStatus.CREATED);
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -47,8 +46,8 @@ public class BookController {
         return new ResponseEntity<ReadBookDetailDto>(readBookDetailDto, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "{bookId}")
-    public ResponseEntity bookDelete(@PathVariable Long bookId) throws Exception{
+    @DeleteMapping(value = "/{bookId}")
+    public ResponseEntity bookDelete(@PathVariable Long bookId) throws Exception {
         bookService.deleteBook(bookId);
         return new ResponseEntity(HttpStatus.OK);
     }

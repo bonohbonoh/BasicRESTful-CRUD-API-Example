@@ -19,28 +19,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+
     @Transactional
     public boolean registrationBook(RegistrationBookDto dto) throws Exception {
         Optional<Book> book = bookRepository.findAllByTitle(dto.toEntity().getTitle());
-        if (book.isPresent()){
+        if (book.isPresent()) {
             throw new DuplicateKeyException("이미 존재하는 책입니다.");
         }
         String title = bookRepository.save(dto.toEntity()).getTitle();
-        if(!title.equals("")){
+        if (!title.equals("")) {
             return true;
         }
         return false;
     }
 
     @Transactional(readOnly = true)
-    public List<ReadListBookDto> readListBookDto() throws Exception{
+    public List<ReadListBookDto> readListBookDto() throws Exception {
         return bookRepository.findAllByBookId().stream().map(book -> new ReadListBookDto(book)).collect(Collectors.toList());
     }
 
     @Transactional
-    public void updateBookInfo(Long bookId, UpdateBookDto dto) throws Exception{
+    public void updateBookInfo(Long bookId, UpdateBookDto dto) throws Exception {
         Book book = bookRepository.findByBookId(bookId).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
-        if(dto.getTitle().equals(book.getTitle()) && dto.getAuthor().equals(book.getAuthor()) && dto.getPrice() == book.getPrice()){
+        if (dto.getTitle().equals(book.getTitle()) && dto.getAuthor().equals(book.getAuthor()) && dto.getPrice() == book.getPrice()) {
             throw new RuntimeException("변경사항이 없습니다.");
         }
         book.updateTitle(dto.getTitle());
@@ -48,12 +49,12 @@ public class BookService {
         book.updatePrice(dto.getPrice());
     }
 
-    public ReadBookDetailDto readBookDetailDto(Long boardId) throws Exception{
+    public ReadBookDetailDto readBookDetailDto(Long boardId) throws Exception {
         Book book = bookRepository.findByBookId(boardId).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
         return new ReadBookDetailDto(book);
     }
 
-    public void deleteBook (Long boardId) throws Exception{
+    public void deleteBook(Long boardId) throws Exception {
         bookRepository.deleteById(boardId);
     }
 
