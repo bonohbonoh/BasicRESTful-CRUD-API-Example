@@ -35,7 +35,7 @@ public class BookController {
     }
 
     @PutMapping(value = "/{bookId}")
-    public ResponseEntity<UpdateBookDto> updateBookDtoResponseEntity(@PathVariable Long bookId, @RequestBody UpdateBookDto dto) throws Exception {
+    public ResponseEntity<UpdateBookDto> updateBookDtoResponseEntity(@PathVariable Long bookId, @Valid @RequestBody UpdateBookDto dto) throws Exception {
         bookService.updateBookInfo(bookId, dto);
         return new ResponseEntity<UpdateBookDto>(HttpStatus.OK);
     }
