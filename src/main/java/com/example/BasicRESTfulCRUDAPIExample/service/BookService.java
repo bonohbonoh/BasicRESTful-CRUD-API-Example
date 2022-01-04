@@ -49,13 +49,14 @@ public class BookService {
         book.updatePrice(dto.getPrice());
     }
 
-    public ReadBookDetailDto readBookDetailDto(Long boardId) throws Exception {
-        Book book = bookRepository.findByBookId(boardId).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
+    public ReadBookDetailDto readBookDetailDto(Long bookId) throws Exception {
+        Book book = bookRepository.findByBookId(bookId).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
         return new ReadBookDetailDto(book);
     }
 
-    public void deleteBook(Long boardId) throws Exception {
-        bookRepository.deleteById(boardId);
+    public Long deleteBook(Long bookId) throws Exception {
+        bookRepository.deleteById(bookId);
+        return bookId;
     }
 
 }

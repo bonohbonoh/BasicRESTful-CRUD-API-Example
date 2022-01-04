@@ -1,6 +1,7 @@
 package com.example.BasicRESTfulCRUDAPIExample.dto;
 
 import com.example.BasicRESTfulCRUDAPIExample.entity.Book;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class ReadBookDetailDto {
     @NotEmpty
     private String title;

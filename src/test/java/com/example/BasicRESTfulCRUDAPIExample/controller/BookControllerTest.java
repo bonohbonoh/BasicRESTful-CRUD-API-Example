@@ -52,7 +52,6 @@ public class BookControllerTest {
                 )
                 //then
                 .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bookId").exists())
                 .andDo(print());
     }
 
