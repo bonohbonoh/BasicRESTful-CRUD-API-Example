@@ -22,7 +22,6 @@ public class BookController {
     @PostMapping(value = "")
     public ResponseEntity<Long> bookSave(@RequestBody @Valid RegistrationBookDto dto) throws Exception {
         return new ResponseEntity<Long>(bookService.registrationBook(dto), HttpStatus.CREATED);
-
     }
 
     @GetMapping(value = "/readall")
@@ -42,6 +41,6 @@ public class BookController {
 
     @DeleteMapping(value = "/{bookId}")
     public ResponseEntity<Long> bookDelete(@PathVariable Long bookId) throws Exception {
-        return new ResponseEntity(bookService.deleteBook(bookId), HttpStatus.OK);
+        return new ResponseEntity<Long>(bookService.deleteBook(bookId), HttpStatus.OK);
     }
 }
