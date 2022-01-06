@@ -43,10 +43,10 @@ public class BookServiceTest {
         RegistrationBookDto dto = new RegistrationBookDto(TITLE, AUTHOR, PRICE);
 
         //when
-        boolean isRegistration = bookService.registrationBook(dto);
+        Long bookId = bookService.registrationBook(dto);
 
         //then
-        assertThat(isRegistration).isTrue();
+        assertThat(bookId).isNotNull();
 
     }
 
@@ -58,10 +58,10 @@ public class BookServiceTest {
         Optional<Book> book = bookRepository.findByBookId(1L);
 
         //when
-        ReadBookDetailDto dto = bookService.readBookDetailDto(book.get().getBookId());
+        Long bookId = bookService.readBookDetailDto(book.get().getBookId());
 
         //then
-        assertThat(book).isNotNull();
+        assertThat(bookId).isNotNull();
 
     }
 

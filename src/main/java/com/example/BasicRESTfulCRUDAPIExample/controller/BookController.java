@@ -20,35 +20,28 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping(value = "")
-    public ResponseEntity bookSave(@RequestBody @Valid RegistrationBookDto dto) throws Exception {
-        boolean isRegistrationBook = bookService.registrationBook(dto);
-        if (isRegistrationBook) {
-            return new ResponseEntity(HttpStatus.CREATED);
-        }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Long> bookSave(@RequestBody @Valid RegistrationBookDto dto) throws Exception {
+        return new ResponseEntity<Long>(bookService.registrationBook(dto), HttpStatus.CREATED);
+
     }
 
     @GetMapping(value = "/readall")
     public ResponseEntity<List<ReadListBookDto>> readListBookDtoResponseEntity() throws Exception {
-        List<ReadListBookDto> readListBookDtoList = bookService.readListBookDto();
-        return new ResponseEntity<List<ReadListBookDto>>(readListBookDtoList, HttpStatus.OK);
+        return new ResponseEntity<List<ReadListBookDto>>(bookService.readListBookDto(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{bookId}")
-    public ResponseEntity<UpdateBookDto> updateBookDtoResponseEntity(@PathVariable Long bookId, @Valid @RequestBody UpdateBookDto dto) throws Exception {
-        bookService.updateBookInfo(bookId, dto);
-        return new ResponseEntity<UpdateBookDto>(HttpStatus.OK);
+    public ResponseEntity<Long> updateBookDtoResponseEntity(@PathVariable Long bookId, @Valid @RequestBody UpdateBookDto dto) throws Exception {
+        return new ResponseEntity<Long>(bookService.updateBookInfo(bookId, dto), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{bookId}")
-    public ResponseEntity<ReadBookDetailDto> readBookDetailDtoResponseEntity(@PathVariable Long bookId) throws Exception {
-        ReadBookDetailDto readBookDetailDto = bookService.readBookDetailDto(bookId);
-        return new ResponseEntity<ReadBookDetailDto>(readBookDetailDto, HttpStatus.OK);
+    public ResponseEntity<Long> readBookDetailDtoResponseEntity(@PathVariable Long bookId) throws Exception {
+        return new ResponseEntity<Long>(bookService.readBookDetailDto(bookId), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{bookId}")
-    public ResponseEntity bookDelete(@PathVariable Long bookId) throws Exception {
-        bookService.deleteBook(bookId);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<Long> bookDelete(@PathVariable Long bookId) throws Exception {
+        return new ResponseEntity(bookService.deleteBook(bookId), HttpStatus.OK);
     }
 }

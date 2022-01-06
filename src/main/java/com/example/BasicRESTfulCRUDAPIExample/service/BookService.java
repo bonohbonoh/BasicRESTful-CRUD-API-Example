@@ -21,16 +21,13 @@ public class BookService {
     private final BookRepository bookRepository;
 
     @Transactional
-    public boolean registrationBook(RegistrationBookDto dto) throws Exception {
+    public Long registrationBook(RegistrationBookDto dto) throws Exception {
         Optional<Book> book = bookRepository.findAllByTitle(dto.toEntity().getTitle());
         if (book.isPresent()) {
             throw new DuplicateKeyException("이미 존재하는 책입니다.");
         }
-        String title = bookRepository.save(dto.toEntity()).getTitle();
-        if (!title.equals("")) {
-            return true;
-        }
-        return false;
+        Long bookId = bookRepository.save(dto.toEntity()).getBookId();
+        return bookId;
     }
 
     @Transactional(readOnly = true)
@@ -39,7 +36,7 @@ public class BookService {
     }
 
     @Transactional
-    public void updateBookInfo(Long bookId, UpdateBookDto dto) throws Exception {
+    public Long updateBookInfo(Long bookId, UpdateBookDto dto) throws Exception {
         Book book = bookRepository.findByBookId(bookId).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
         if (dto.getTitle().equals(book.getTitle()) && dto.getAuthor().equals(book.getAuthor()) && dto.getPrice() == book.getPrice()) {
             throw new RuntimeException("변경사항이 없습니다.");
@@ -47,11 +44,13 @@ public class BookService {
         book.updateTitle(dto.getTitle());
         book.updateAuthor(dto.getAuthor());
         book.updatePrice(dto.getPrice());
+        Long saveBookId = bookRepository.save(book).getBookId();
+        return saveBookId;
     }
 
-    public ReadBookDetailDto readBookDetailDto(Long bookId) throws Exception {
+    public Long readBookDetailDto(Long bookId) throws Exception {
         Book book = bookRepository.findByBookId(bookId).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
-        return new ReadBookDetailDto(book);
+        return bookId;
     }
 
     public Long deleteBook(Long bookId) throws Exception {
