@@ -35,12 +35,12 @@ public class BookController {
     }
 
     @GetMapping(value = "/{bookId}")
-    public ResponseEntity<Long> readBookDetailDtoResponseEntity(@PathVariable Long bookId) throws Exception {
-        return new ResponseEntity<Long>(bookService.readBookDetailDto(bookId), HttpStatus.OK);
+    public ResponseEntity<ReadBookDetailDto> readBookDetailDtoResponseEntity(@PathVariable Long bookId) throws Exception {
+        return new ResponseEntity<ReadBookDetailDto>(bookService.readBookDetailDto(bookId), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{bookId}")
-    public ResponseEntity<Long> bookDelete(@PathVariable Long bookId) throws Exception {
-        return new ResponseEntity<Long>(bookService.deleteBook(bookId), HttpStatus.OK);
+    public void bookDelete(@PathVariable Long bookId) throws Exception {
+        bookService.deleteBook(bookId);
     }
 }

@@ -58,10 +58,10 @@ public class BookServiceTest {
         Optional<Book> book = bookRepository.findByBookId(1L);
 
         //when
-        Long bookId = bookService.readBookDetailDto(book.get().getBookId());
+        ReadBookDetailDto dto = bookService.readBookDetailDto(book.get().getBookId());
 
         //then
-        assertThat(bookId).isNotNull();
+        assertThat(dto).isNotNull();
 
     }
 
@@ -107,9 +107,9 @@ public class BookServiceTest {
         Long bookId = 1L;
 
         //when
-        Long deleteId = bookService.deleteBook(bookId);
+        bookService.deleteBook(bookId);
 
         //then
-        assertThat(bookRepository.findByBookId(deleteId)).isEmpty();
+        assertThat(bookRepository.findByBookId(bookId)).isEmpty();
     }
 }

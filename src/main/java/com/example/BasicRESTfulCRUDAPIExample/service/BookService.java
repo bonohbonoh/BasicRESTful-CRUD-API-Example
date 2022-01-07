@@ -48,14 +48,14 @@ public class BookService {
         return saveBookId;
     }
 
-    public Long readBookDetailDto(Long bookId) throws Exception {
+    public ReadBookDetailDto readBookDetailDto(Long bookId) throws Exception {
         Book book = bookRepository.findByBookId(bookId).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
-        return bookId;
+        ReadBookDetailDto dto = new ReadBookDetailDto(book);
+        return dto;
     }
 
-    public Long deleteBook(Long bookId) throws Exception {
+    public void deleteBook(Long bookId) throws Exception {
         bookRepository.deleteById(bookId);
-        return bookId;
     }
 
 }
