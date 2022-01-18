@@ -40,7 +40,7 @@ public class BookController {
     }
 
     @DeleteMapping(value = "/{bookId}")
-    public void bookDelete(@PathVariable Long bookId) throws Exception {
-        bookService.deleteBook(bookId);
+    public ResponseEntity bookDelete(@PathVariable Long bookId) throws Exception {
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

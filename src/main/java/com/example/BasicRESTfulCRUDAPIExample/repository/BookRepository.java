@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-    public Optional<Book> findByBookId(Long bookId);
+    Optional<Book> findByBookId(Long bookId);
 
-    public Optional<Book> findAllByTitle(String title);
+    Optional<Book> findAllByTitle(String title);
 
-    @Query("select booklist from book booklist order by booklist.bookId desc") // BookId순서로 정렬
-    public List<Book> findAllByBookId();
+    @Query("select booklist from book booklist order by booklist.bookId desc")
+    List<Book> findAllByBookId();
 }
