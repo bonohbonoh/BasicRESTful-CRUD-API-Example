@@ -2,11 +2,10 @@ package com.example.BasicRESTfulCRUDAPIExample.controller;
 
 import com.example.BasicRESTfulCRUDAPIExample.dto.RegistrationBookDto;
 import com.example.BasicRESTfulCRUDAPIExample.dto.UpdateBookDto;
+import com.example.BasicRESTfulCRUDAPIExample.entity.Book;
+import com.example.BasicRESTfulCRUDAPIExample.repository.BookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,12 +13,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BookControllerTest {
 
     private static final String TITLE = "title";
@@ -36,8 +39,31 @@ public class BookControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private BookController bookController;
+
+    @BeforeAll
+    public void settingMvcBuilder() {
+        mvc = MockMvcBuilders
+                .standaloneSetup(bookController)
+                .addFilter(new CharacterEncodingFilter("utf-8", true))
+                .build();
+    }
+
+    @BeforeAll
+    public void initBook(){
+        Book book = Book.builder()
+                .title("init_title")
+                .author("name")
+                .price(1000)
+                .build();
+        bookRepository.save(book);
+    }
+
     @Test
-    @Order(1)
     public void postControllerTest() throws Exception {
 
         //given
@@ -56,7 +82,6 @@ public class BookControllerTest {
     }
 
     @Test
-    @Order(4)
     public void putControllerTest() throws Exception {
 
         //given
@@ -76,7 +101,6 @@ public class BookControllerTest {
     }
 
     @Test
-    @Order(2)
     public void getControllerTest() throws Exception {
 
         //given
@@ -93,7 +117,6 @@ public class BookControllerTest {
     }
 
     @Test
-    @Order(3)
     public void getAllControllerTest() throws Exception {
 
         //when
@@ -108,7 +131,6 @@ public class BookControllerTest {
     }
 
     @Test
-    @Order(5)
     public void deleteControllerTest() throws Exception {
 
         //given
