@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findByBookId(Long bookId);
 
-    Optional<Book> findAllByTitle(String title);
+    Optional<Book> findByTitle(String title);
 
     @Query("select booklist from book booklist order by booklist.bookId desc")
     List<Book> findAllByBookId();

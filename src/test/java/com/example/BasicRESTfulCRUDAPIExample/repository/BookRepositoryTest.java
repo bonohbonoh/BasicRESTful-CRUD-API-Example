@@ -1,12 +1,10 @@
 package com.example.BasicRESTfulCRUDAPIExample.repository;
 
 import com.example.BasicRESTfulCRUDAPIExample.entity.Book;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +12,8 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BookRepositoryTest {
 
     private static final String TITLE = "title";
@@ -27,9 +26,23 @@ public class BookRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
+    @BeforeAll
+    public void initBook(){
+        Book book = Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .price(1000)
+                .build();
+        bookRepository.save(book);
+    }
+
+    public void deleteAll(){
+        bookRepository.deleteAll();
+    }
+
     @Test
-    @Order(1)
     public void createBookTest() {
+        deleteAll();
 
         //given
         Book book = Book.builder()
@@ -46,23 +59,21 @@ public class BookRepositoryTest {
     }
 
     @Test
-    @Order(2)
     public void readBookTitleTest() {
 
         //given
         String bookTitle = TITLE;
 
         //when
-        Optional<Book> book = bookRepository.findAllByTitle(bookTitle);
+        Book book = bookRepository.findByTitle(bookTitle).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
 
         //then
-        assertThat(book.get().getTitle()).isEqualTo(TITLE);
-        assertThat(book.get().getAuthor()).isEqualTo(AUTHOR);
-        assertThat(book.get().getPrice()).isEqualTo(PRICE);
+        assertThat(book.getTitle()).isEqualTo(TITLE);
+        assertThat(book.getAuthor()).isEqualTo(AUTHOR);
+        assertThat(book.getPrice()).isEqualTo(PRICE);
     }
 
     @Test
-    @Order(3)
     public void readBookListTest() {
 
         //given
@@ -83,12 +94,11 @@ public class BookRepositoryTest {
     }
 
     @Test
-    @Order(4)
     public void updateTest() {
 
         //given
         Long bookId = 1L;
-        Book book = bookRepository.findByBookId(bookId).get();
+        Book book = bookRepository.findByBookId(bookId).orElseThrow(() -> new RuntimeException("책이 존재하지 않습니다."));
 
         //when
         book.updateTitle(UPDATE_TITLE);
@@ -103,7 +113,6 @@ public class BookRepositoryTest {
     }
 
     @Test
-    @Order(5)
     public void deleteTest() {
         //given
         Long bookId = 1L;
