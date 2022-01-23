@@ -22,7 +22,7 @@ public class BookService {
 
     @Transactional
     public Long registrationBook(RegistrationBookDto dto) throws Exception {
-        Optional<Book> book = bookRepository.findAllByTitle(dto.toEntity().getTitle());
+        Optional<Book> book = bookRepository.findByTitle(dto.toEntity().getTitle());
         if (book.isPresent()) {
             throw new DuplicateKeyException("이미 존재하는 책입니다.");
         }
@@ -54,6 +54,7 @@ public class BookService {
         return dto;
     }
 
+    @Transactional
     public void deleteBook(Long bookId) throws Exception {
         bookRepository.deleteById(bookId);
     }

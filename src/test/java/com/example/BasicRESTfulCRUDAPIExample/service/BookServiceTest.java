@@ -6,12 +6,10 @@ import com.example.BasicRESTfulCRUDAPIExample.dto.RegistrationBookDto;
 import com.example.BasicRESTfulCRUDAPIExample.dto.UpdateBookDto;
 import com.example.BasicRESTfulCRUDAPIExample.entity.Book;
 import com.example.BasicRESTfulCRUDAPIExample.repository.BookRepository;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +17,8 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BookServiceTest {
 
     private static final String TITLE = "title";
@@ -35,9 +34,23 @@ public class BookServiceTest {
     @Autowired
     private BookRepository bookRepository;
 
+    @BeforeAll
+    public void initBook(){
+        Book book = Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .price(1000)
+                .build();
+        bookRepository.save(book);
+    }
+
+    public void deleteAll(){
+        bookRepository.deleteAll();
+    }
+
     @Test
-    @Order(1)
     public void registrationServiceTest() throws Exception {
+        deleteAll();
 
         //given
         RegistrationBookDto dto = new RegistrationBookDto(TITLE, AUTHOR, PRICE);
@@ -51,7 +64,6 @@ public class BookServiceTest {
     }
 
     @Test
-    @Order(2)
     public void readDetailServiceTest() throws Exception{
 
         //given
@@ -66,7 +78,6 @@ public class BookServiceTest {
     }
 
     @Test
-    @Order(3)
     public void updateServiceTest() throws Exception{
         //given
         Long bookId = 1L;
@@ -84,7 +95,6 @@ public class BookServiceTest {
     }
 
     @Test
-    @Order(4)
     public void readListServiceTest() throws Exception{
 
         //given
@@ -100,7 +110,6 @@ public class BookServiceTest {
     }
 
     @Test
-    @Order(5)
     public void deleteServiceTest() throws Exception{
 
         //given
